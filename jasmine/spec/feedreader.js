@@ -136,8 +136,8 @@ $(function() {
 
 
         it('when new feed is loaded content changes', function (done) {
-            //test whether the entry item assigned by the first loadFeed
-            //call is different from the entry assigned by the second call
+            //test whether the .feed content assigned by the first loadFeed
+            //call is different from the content assigned by the second call
             expect($entryContentFirst).not.toBe($entryContentSecond);
             done();
         });
