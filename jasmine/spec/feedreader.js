@@ -25,16 +25,14 @@ $(function() {
         it('are defined', function() {
             //test that the allFeeds array is defined and that its length is
             //not empty
-            expect(allFeeds).toBeDefined();
-            expect(allFeeds.length).not.toBe(0);
+            expect(allFeeds).toBeTruthy();
         });
 
         it('URLs are defined', function () {
             allFeeds.forEach(function (t) {
                 //test that each item in allFeeds has a url property defined
                 //and that it is not empty
-                expect(t.url).toBeDefined();
-                expect(t.url.length).not.toBe(0);
+                expect(t.url).toBeTruthy();
             });
         });
 
@@ -77,9 +75,9 @@ $(function() {
         it('the menu changes visibility when clicked', function () {
             //test that a click event on the menu icon toggles the
             //menu-hidden class
-            $menuIcon.trigger("click");
-            expect($body.hasClass("menu-hidden")).not.toBe(true);
-            $menuIcon.trigger("click");
+            $menuIcon.click();
+            expect($body.hasClass("menu-hidden")).toBe(false);
+            $menuIcon.click();
             expect($body.hasClass("menu-hidden")).toBe(true);
 
         });
@@ -91,9 +89,6 @@ $(function() {
 
     describe('Initial Entries', function () {
 
-        var $feed = $(".feed");
-
-
         /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
@@ -103,14 +98,12 @@ $(function() {
 
         beforeEach(function (done) {
             //use beforeEach and done() to call async loadFeed function
-            loadFeed(0, function () {
-                done();
-            });
+            loadFeed(0, done);
         });
 
         it('.feed container contains an .entry element', function (done) {
             //test that the .feed element contains a .entry element
-            expect($feed.find(".entry").length > 0).toBe(true);
+            expect($(".feed .entry").length).toBeGreaterThan(0);
             done();
         });
     });
@@ -126,31 +119,23 @@ $(function() {
          * Remember, loadFeed() is asynchronous.
          */
 
-        var $entryContentFirst = "test";
-        var $entryContentSecond = "test";
+        var $entryContentFirst,
+            $entryContentSecond;
+
+
 
         beforeEach(function (done) {
-            //use beforeEach and done() to call async loadFeed function
-            //and assign the first entry item html to a variable for comparision
-            loadFeed(0, function () {
-                $entryContentFirst = $(".entry").first().html();
-                done();
-            });
-        });
-
-        beforeEach(function (done) {
-            //call loadFeed with a different feed and assign the first entry
-            //item html to a variable for comparision
-            loadFeed(1, function () {
-                $entryContentSecond = $(".entry").first().html();
-                done();
-            });
+           loadFeed(0, function () {
+               $entryContentFirst = $('.feed').html();
+               loadFeed(1, function () {
+                   $entryContentSecond = $('.feed').html();
+                   done();
+               })
+           })
         });
 
 
         it('when new feed is loaded content changes', function (done) {
-            console.log($entryContentFirst);
-            console.log($entryContentSecond);
             //test whether the entry item assigned by the first loadFeed
             //call is different from the entry assigned by the second call
             expect($entryContentFirst).not.toBe($entryContentSecond);
