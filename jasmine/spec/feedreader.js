@@ -130,8 +130,8 @@ $(function() {
                loadFeed(1, function () {
                    $entryContentSecond = $('.feed').html();
                    done();
-               })
-           })
+               });
+           });
         });
 
 
